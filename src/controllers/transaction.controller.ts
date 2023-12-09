@@ -11,6 +11,15 @@ export class TransactionController {
     }
   }
 
+  static async getAll(req: Request, res: Response) {
+    try {
+      const transactions = await TransactionService.fetchAll();
+      res.status(200).json(transactions);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  }
+
   static async getById(req: Request, res: Response) {
     try {
       const transaction = await TransactionService.fetchTransactionById(req.params.id);
