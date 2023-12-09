@@ -1,38 +1,36 @@
-import { getRepository } from 'typeorm';
 import { Invoice } from '../models/Invoice';
+import { UserService } from './user.service';
+import { InvoiceRepository } from '../repositories/repos';
 
 export class InvoiceService {
-  static async createInvoice(invoiceData: Partial<Invoice>): Promise<Invoice> {
-    const invoiceRepository = getRepository(Invoice);
-    const invoice = invoiceRepository.create(invoiceData);
-    return await invoiceRepository.save(invoice);
+  static async createInvoice(receiverEmail: string, amount: number, dueDate: Date): Promise<Invoice> {
+    const receiver = await UserService.fetchUserByEmail(receiverEmail);
+    if (!receiver) throw new Error(`No user registered with email: ${receiverEmail}`);
+    const invoice = InvoiceRepository.create(new Invoice(receiver, amount, dueDate));
+    return await InvoiceRepository.save(invoice);
   }
 
   static async fetchInvoices(): Promise<Invoice[]> {
-    const invoiceRepository = getRepository(Invoice);
-    return await invoiceRepository.find();
+    return await InvoiceRepository.find();
   }
 
   static async fetchInvoiceById(invoiceId: string): Promise<Invoice | null> {
-    const invoiceRepository = getRepository(Invoice);
-    return await invoiceRepository.findOneBy({ id: invoiceId });
+    return await InvoiceRepository.findOneBy({ id: invoiceId });
   }
 
 
   static async updateInvoice(updatedInvoiceData: Partial<Invoice>): Promise<Invoice | null> {
-    const invoiceRepository = getRepository(Invoice);
-    const existingInvoice = await invoiceRepository.findOneBy({ id: updatedInvoiceData.id });
+    const existingInvoice = await InvoiceRepository.findOneBy({ id: updatedInvoiceData.id });
     if (!existingInvoice) return null;
-    const updatedInvoice = invoiceRepository.merge(existingInvoice, updatedInvoiceData);
-    return await invoiceRepository.save(updatedInvoice);
+    const updatedInvoice = InvoiceRepository.merge(existingInvoice, updatedInvoiceData);
+    return await InvoiceRepository.save(updatedInvoice);
   }
 
 
   static async deleteInvoiceById(invoiceId: string): Promise<Invoice | null> {
-    const invoiceRepository = getRepository(Invoice);
-    const existingInvoice = await invoiceRepository.findOneBy({ id: invoiceId });
+    const existingInvoice = await InvoiceRepository.findOneBy({ id: invoiceId });
     if (!existingInvoice) return null;
-    await invoiceRepository.remove(existingInvoice);
+    await InvoiceRepository.remove(existingInvoice);
     return existingInvoice;
   }
 }

@@ -1,10 +1,11 @@
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
 import app from './app';
+import 'dotenv/config';
+import { dataSource } from './repositories/repos';
 
 const PORT = process.env.PORT || 3000;
 
-createConnection()
+dataSource.initialize()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);

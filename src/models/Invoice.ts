@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './User';
+import { InvoiceStatus } from '../enums/InvoiceStatus';
 
 @Entity()
 export class Invoice {
@@ -13,11 +14,18 @@ export class Invoice {
   amount: number;
 
   @Column()
-  status: string;
+  status: InvoiceStatus;
 
   @Column()
   dueDate: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  constructor(receiver: User, amount: number, dueDate: Date){
+    this.receiver = receiver;
+    this.amount = amount;
+    this.dueDate = dueDate;
+    this.status = InvoiceStatus.GENERATED;
+  }
 }

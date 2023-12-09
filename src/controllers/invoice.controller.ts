@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { InvoiceService } from '../services/invoice.service';
+import { Invoice } from '../models/Invoice';
 
 export class InvoiceController {
   static async create(req: Request, res: Response) {
     try {
-      const newInvoice = await InvoiceService.createInvoice(req.body);
+      const {receiverEmail, amount, dueDate} = req.body;
+      const newInvoice = await InvoiceService.createInvoice(receiverEmail, amount, dueDate);
       res.status(201).json(newInvoice);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
