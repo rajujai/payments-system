@@ -67,4 +67,15 @@ export class UserController {
       res.status(500).json({ error: (error as Error).message });
     }
   }
+
+
+  static async login(req: Request, res: Response) {
+    const { email, password } = req.body;
+    try {
+      const token = await UserService.login(email, password);
+      res.status(200).json({token});
+    } catch (error) {
+      res.status(401).json({ error: (error as Error).message });
+    }
+  };
 }

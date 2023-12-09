@@ -10,5 +10,6 @@ router.get('/users/:id', authenticate, UserController.getById);
 router.get('/users/:email', authenticate, UserController.getByEmail);
 router.put('/users', authenticate, UserController.update);
 router.delete('/users/:id', authenticate, UserController.delete);
+router.post('/users/login', UserController.login);
 
 export default router;
