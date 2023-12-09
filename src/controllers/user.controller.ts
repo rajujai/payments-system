@@ -11,9 +11,30 @@ export class UserController {
     }
   }
 
+  static async getAll(req: Request, res: Response) {
+    try {
+      const users = await UserService.getAll();
+      res.status(200).json(users);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  }
+
   static async getById(req: Request, res: Response) {
     try {
       const user = await UserService.fetchUserById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ error: `User not found with id: ${req.body.id}` });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  }
+
+  static async getByEmail(req: Request, res: Response) {
+    try {
+      const user = await UserService.fetchUserByEmail(req.params.email);
       if (!user) {
         return res.status(404).json({ error: `User not found with id: ${req.body.id}` });
       }

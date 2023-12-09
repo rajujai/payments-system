@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Transaction } from './Transaction';
 import { Invoice } from './Invoice';
 
-@Entity({name: "user"})
+@Entity({ name: "user" })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -13,10 +13,10 @@ export class User {
   @Column()
   passwordHash: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   role: string;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)

@@ -8,6 +8,10 @@ export class InvoiceService {
     return await invoiceRepository.save(invoice);
   }
 
+  static async fetchInvoices(): Promise<Invoice[]> {
+    const invoiceRepository = getRepository(Invoice);
+    return await invoiceRepository.find();
+  }
 
   static async fetchInvoiceById(invoiceId: string): Promise<Invoice | null> {
     const invoiceRepository = getRepository(Invoice);

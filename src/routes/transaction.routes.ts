@@ -6,6 +6,7 @@ import { authorize } from '../middleware/authorization.middleware';
 const router = express.Router();
 
 router.post('/transactions', authenticate, TransactionController.create);
+router.get('/transactions', authenticate, TransactionController.getAll);
 router.get('/transactions/:id', authenticate, TransactionController.getById);
 router.put('/transactions', authenticate, authorize(["ADMIN"]), TransactionController.update);
 // router.delete('/transactions/:id', authenticate, TransactionController.delete);

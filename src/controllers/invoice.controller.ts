@@ -11,6 +11,15 @@ export class InvoiceController {
     }
   }
 
+  static async getAll(req: Request, res: Response) {
+    try {
+      const invoices = await InvoiceService.fetchInvoices();
+      res.status(200).json(invoices);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  }
+
   static async getById(req: Request, res: Response) {
     try {
       const invoice = await InvoiceService.fetchInvoiceById(req.params.id);

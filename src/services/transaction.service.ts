@@ -8,6 +8,10 @@ export class TransactionService {
     return await transactionRepository.save(transaction);
   }
 
+  static async fetchAll(): Promise<Transaction[] | null> {
+    const transactionRepository = getRepository(Transaction);
+    return await transactionRepository.find();
+  }
 
   static async fetchTransactionById(transactionId: string): Promise<Transaction | null> {
     const transactionRepository = getRepository(Transaction);
